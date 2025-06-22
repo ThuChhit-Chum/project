@@ -101,6 +101,29 @@ cd ~/fivem/server1
 
 
 
+# Create folder
+mkdir -p ~/fivem/server2
+cd ~/fivem/server2
+
+# Download and extract FXServer build
+wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/7290-a654bcc2adfa27c4e020fc915a1a6343c3b4f921/fx.tar.xz -O fx.tar.xz
+tar -xf fx.tar.xz && rm fx.tar.xz
+
+# Make run.sh executable
+chmod +x run.sh
+
+nano ~/fivem/server2/start.sh
+
+#!/bin/bash
+cd ~/fivem/server2
+./run.sh +set serverProfile server2 +set txAdminPort 40122 +set sv_port 30122
+
+chmod +x ~/fivem/server2/start.sh
+
+rm -rf ~/fivem/server2/txData
+
+~/fivem/server2/start.sh
+
 
 
 
