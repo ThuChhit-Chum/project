@@ -126,6 +126,23 @@ rm -rf ~/fivem/server2/txData
 
 
 
+# ដំឡើង screen (បើមិនទាន់មាន)
+ - sudo apt update
+ - sudo apt install screen -y
+# បើក FXServer នៅក្នុង screen
+ - screen -S fxserver1
+ - cd ~/fivem/server1
+ - ./start.sh
+
+# ចាកចេញពី screen ដោយមិនបិទ FXServer
+ - Ctrl + A  បន្ទាប់បញ្ចក់ D
+
+# ចូលមកវិញ
+ - screen -r fxserver1
+
+
+
+
 
 
 7. ufw allow 22/tcp     # SSH
