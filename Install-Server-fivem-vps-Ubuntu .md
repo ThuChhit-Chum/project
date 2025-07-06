@@ -33,18 +33,18 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mariadb
     container_name: fivem-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: fivemdb
-      MYSQL_USER: fivem
-      MYSQL_PASSWORD: fivempass
+      MYSQL_ROOT_PASSWORD: "Chhit$2605"
+      MYSQL_DATABASE: siemreapcity
+      MYSQL_USER: siemreapcity
+      MYSQL_PASSWORD: siemreapcity  
     volumes:
       - ./mysql:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "8989:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -52,9 +52,9 @@ services:
     restart: always
     environment:
       PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_ROOT_PASSWORD: Chhit$2605
     ports:
-      - "8080:80"
+      - "8899:80"
 
 - docker compose up -d
 - docker compose down
