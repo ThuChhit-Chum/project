@@ -158,78 +158,6 @@ ufw status
 
 
 
-🔧 PART 1: Prepare the VPS
-Step 1: Update & install dependencies
-
-      sudo apt update && sudo apt upgrade -y
-      sudo apt install curl wget git unzip screen htop net-tools nano gnupg ca-certificates lsb-release -y
-
-🐳 PART 2: Install Docker + MariaDB + phpMyAdmin
-Step 2: Install Docker
-
-      sudo install -m 0755 -d /etc/apt/keyrings
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-      echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      sudo apt update
-      sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-
-
-Step 3: Setup Docker Compose for MariaDB + phpMyAdmin
-
-      mkdir -p ~/fivem-docker/mysql
-      cd ~/fivem-docker
-      nano docker-compose.yml
-      
-Paste:
-
-      version: '3.8'
-      services:
-        mysql:
-          image: mariadb
-          container_name: fivem-mysql
-          restart: always
-          environment:
-            MYSQL_ROOT_PASSWORD: Chhit$2605
-            MYSQL_DATABASE: siemreapcity
-            MYSQL_USER: siemreapcity
-            MYSQL_PASSWORD: siemreapcity
-          volumes:
-            - ./mysql:/var/lib/mysql
-          ports:
-            - "8989:3306"
-      
-        phpmyadmin:
-          image: phpmyadmin/phpmyadmin
-          container_name: fivem-phpmyadmin
-          restart: always
-          environment:
-            PMA_HOST: mysql
-            MYSQL_ROOT_PASSWORD: Chhit$2605
-          ports:
-            - "8899:80"
-
-
-Start Docker services:
-
-      docker compose up -d
-
-
-🚀 PART 3: Install FiveM Base
-Step 4: Download FiveM Build
-
-      mkdir -p ~/fivem/base
-      cd ~/fivem/base
-      wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/7290-a654bcc2adfa27c4e020fc915a1a6343c3b4f921/fx.tar.xz
-      tar -xf fx.tar.xz
-      rm fx.tar.xz
-      chmod +x run.sh
-
-
-
-
 🧱 STEP ONE: Create Servers One-by-One
 This is perfect if you want to:
 -Set up and test each server individually
@@ -258,33 +186,36 @@ This is perfect if you want to:
       cd ~/fivem-docker
       nano docker-compose.yml
 
-Paste:
+- Paste:
 
-      version: '3.8'
-            services:
-              mysql:
-                image: mariadb
-                container_name: fivem-mysql
-                restart: always
-                environment:
-                  MYSQL_ROOT_PASSWORD: ThouChhit$2605
-                  MYSQL_DATABASE: siemreapcity
-                  MYSQL_USER: siemreapcity
-                  MYSQL_PASSWORD: Chhit$2605
-                volumes:
-                  - ./mysql:/var/lib/mysql
-                ports:
-                  - "8989:3306"
-            
-              phpmyadmin:
-                image: phpmyadmin/phpmyadmin
-                container_name: fivem-phpmyadmin
-                restart: always
-                environment:
-                  PMA_HOST: mysql
-                  MYSQL_ROOT_PASSWORD: ThouChhit$2605
-                ports:
-                  - "8899:80"
+version: '3.8'
+
+services:
+  mysql:
+    image: mariadb
+    container_name: fivem-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ThouChhit$2605
+      MYSQL_DATABASE: siemreapcity
+      MYSQL_USER: siemreapcity
+      MYSQL_PASSWORD: Chhit$2605
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "8989:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: fivem-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: ThouChhit$2605
+    ports:
+      - "8899:80"
+
+
                   
 Start:
 
@@ -294,35 +225,38 @@ http://your-vps-ip:8899/
 
 ✅ 4. Download FXServer Build (One Time)
 
-      mkdir -p ~/fivem/base
-      cd ~/fivem/base
-      
-      wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/7290-a654bcc2adfa27c4e020fc915a1a6343c3b4f921/fx.tar.xz
-      tar -xf fx.tar.xz
-      rm fx.tar.xz
-      chmod +x run.sh
+mkdir -p ~/fivem/base
+cd ~/fivem/base
+
+wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/7290-a654bcc2adfa27c4e020fc915a1a6343c3b4f921/fx.tar.xz
+tar -xf fx.tar.xz
+rm fx.tar.xz
+chmod +x run.sh
+
 
 ✅ 5. Create First Server (Server1)
 
-      mkdir -p ~/fivem/server1
-      cp -r ~/fivem/base/* ~/fivem/server1
+      mkdir -p ~/fivem/siemreapcity
+      cp -r ~/fivem/base/* ~/fivem/siemreapcity
 Create start.sh:
 
-      nano ~/fivem/server1/start.sh
+      nano ~/fivem/siemreapcity/start.sh
 Paste:
+      
+#!/bin/bash
+cd ~/fivem/siemreapcity
+./run.sh +set serverProfile siemreapcity +set txAdminPort 40121
 
-      #!/bin/bash
-      cd ~/fivem/server1
-      ./run.sh +set serverProfile server1 +set txAdminPort 40121
 
 Make executable:
 
-      chmod +x ~/fivem/server1/start.sh
+      chmod +x ~/fivem/siemreapcity/start.sh
       
 Run:
 
-      screen -S fxserver1
-      ~/fivem/server1/start.sh
+      screen -S siemreapcity
+      ~/fivem/siemreapcity/start.sh
+      screen -r siemreapcity
 
 - Open browser:
 http://your-vps-ip:40121/
@@ -418,11 +352,11 @@ Server	txAdmin URL
 
 ✅ 3. Open Firewall Ports
 
-      sudo ufw allow OpenSSH
-      sudo ufw allow 40121:40126/tcp
-      sudo ufw allow 30121:30126/tcp
-      sudo ufw allow 30121:30126/udp
-      sudo ufw enable
+sudo ufw allow OpenSSH
+sudo ufw allow 40121:40126/tcp
+sudo ufw allow 30121:30126/tcp
+sudo ufw allow 30121:30126/udp
+sudo ufw enable
 
 ✅ Final Folder Structure
 
